@@ -16,83 +16,85 @@ from tqdm import tqdm                                   # for progress bars
 from datasets import load_dataset                       # for Hugging Face datasets
 
 # =============================================================================
-# Fighter Aircraft Identifier - Production-Grade CLEAN REAL NAMES DATASET (F-16, F-35, Rafale)
+# Fighter Aircraft Identifier - REAL NAMES + EARLY STOPPING + LR SCHEDULER
 # =============================================================================
-# As a Python ML Evangelist, this program demonstrates best practices:
-# - Command-line interface with argparse
-# - Comprehensive exception handling and graceful degradation
-# - Structured logging to timestamped file + console
-# - GPU acceleration when available
-# - Reproducible training (seed)
-# - Data acquisition from Kaggle (fighter/military-focused) and Hugging Face
-# - Online sample image fetching (Wikimedia public domain fighters for testing/augmentation)
-# - PyTorch ImageFolder + torchvision ResNet50 (transfer learning)
-# - Train / Infer modes with validation
-# - Production-ready: checkpoints, early-stop awareness, clean folder structure
+# New Features
+# Automatic Early Stopping: Training stops automatically if validation accuracy doesn’t improve for N epochs (default = 5).
+# ReduceLROnPlateau Scheduler: Learning rate automatically drops (by 50%) when validation accuracy plateaus.
+# New CLI argument: --patience 5 (you can change it).
+# --epochs is now the maximum epochs (safety net).
+# Beautiful logging of LR changes and early stopping reason.
+# Best model is always saved.
 #
-# Datasets used:
-# - Kaggle: kadirkrtls/tez-set-v1 (8,100 high-quality images, 81 military aircraft classes
-#   including F-16, F-35, Su-57, Rafale, etc. – perfect for fighter identification)
-# - Hugging Face: Voxel51/FGVC-Aircraft (10k+ fine-grained aircraft for comparison)
-# - Online: Public Wikimedia fighter images (no API keys needed)
+# 1. Clean old stuff (recommended)
+# rm -rf aircraft_data best_model.pth fighter_id_*.log
 #
-# Requirements (pip install):
-# torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-# kaggle datasets tqdm pillow requests
+# 2. Download clean dataset + train with smart stopping
+# python3 fighter_id3.py --mode download --source kaggle --dataset-slug a2015003713/militaryaircraftdetectiondataset
 #
-# Kaggle setup (one-time):
-#   1. pip install kaggle
-#   2. Go to https://www.kaggle.com/account → Create API Token
-#   3. Place kaggle.json in ~/.kaggle/kaggle.json (chmod 600)
+# python3 fighter_id3.py --mode train --epochs 30 --batch-size 16 --patience 5
+# Training will now stop automatically (usually around 12–18 epochs) instead of running all 30.
+# Download clean real-name dataset
+# python3 fighter_id.py --mode download --source kaggle
 #
-# Usage examples:
-#   # Download new clean dataset from Kaggle - python3 fighter_id2.py --mode download --source kaggle --dataset-slug a2015003713/militaryaircraftdetectiondataset
-#   python fighter_aircraft_identifier.py --mode download --source kaggle
-#   python fighter_aircraft_identifier.py --mode train --source kaggle --epochs 20 --batch-size 32
-#   python fighter_aircraft_identifier.py --mode infer --infer-image "f35_test.jpg" --model-path best_model.pth
-#   python fighter_aircraft_identifier.py --mode download --source online --data-dir ./samples
-# # 1. Clean old data/model (important!)
-# rm -rf aircraft_data best_model.pth fighter_id2_*.log
+# Train with smart stopping
+# python3 fighter_id.py --mode train --epochs 30 --batch-size 16 --patience 5
 #
-# 2. Download the new clean dataset
-# python3 fighter_id2.py --mode download --source kaggle --dataset-slug a2015003713/militaryaircraftdetectiondataset
-# 
-# 3. Train (16 epochs recommended for this dataset)
-# python3 fighter_id2.py --mode train --epochs 16 --batch-size 16
-#
-# Epochs and Batch Size are the two most important hyperparameters that control how your model learns in the fighter aircraft identifier script.
-# Here’s a clear, no-jargon explanation (with direct ties to your code):
-# 1. Epoch — “How many times the model sees the entire dataset”
-#
-# What it does:
-# One epoch = the model looks at every single image in your training set once.
-# In your script:Bash--epochs 15means the model will go through all ~5,670 training images 15 full times.
-# Significance:
-# More epochs → model learns deeper patterns (better accuracy).
-# Too few epochs → underfitting (model is still dumb).
-# Too many epochs → overfitting (model memorizes your training data but fails on new photos).
-#
-# Sweet spot for fighter aircraft:
-# With the new clean dataset (a2015003713/militaryaircraftdetectiondataset): 10–20 epochs is perfect.
-# You usually see accuracy jump a lot in the first 5–8 epochs, then slow down.
-# In your log you’ll see lines like:textEpoch 7 | Train Acc: 0.9123 | Val Acc: 0.8945Watch the Val Acc — when it stops improving for 3–4 epochs, you can stop (early stopping would be added in v2 if you want).
-#
-#
-# 2. Batch Size — “How many images the model processes at once”
-#
-# What it does:
-# Instead of updating the model after every single image (very noisy), it looks at a small group (batch) and updates once per group.
-# Significance:
-# Larger batch (32, 64, 128):
-# → Faster training (fewer updates per epoch)
-# → More stable gradients (smoother learning)
-# → Uses more GPU/CPU memory
-# Smaller batch (8, 16):
-# → More updates per epoch (can learn faster initially)
-# → More noise → sometimes better generalization
-# → Uses less memory (safer on laptops)
+# Test on a photo
+# python3 fighter_id.py --mode infer --infer-image "f35_test.jpg"
+# or from URL:
+# python3 fighter_id.py --mode infer --infer-image "https://upload.wikimedia.org/.../F-35_Lightning_II.jpg"
+
 # =============================================================================
 
+'''
+1. Core / Always Required
+ParameterType / ChoicesDefaultSignificance & When to Change--modedownload, train, infer (required)— (must specify)The only required argument. 
+Tells the program what to do:
+• download → get the dataset
+• train → train the model
+• infer → predict on one image
+Always use this first.
+
+2. Download Mode Parameters
+ParameterType / ChoicesDefaultSignificance & When to Change--sourcekaggle, hf, onlinekaggleChooses where data comes from.
+• kaggle = clean fighter dataset with real names (recommended)
+• hf = Hugging Face FGVC-Aircraft
+• online = 10 public Wikimedia sample images
+Change only if you want to test a different source.--dataset-slugstringa2015003713/militaryaircraftdetectiondataset
+Kaggle dataset identifier. Controls which dataset is downloaded.
+Leave as-is for real fighter names (F-35, Rafale, etc.). 
+Change only if you want a different Kaggle dataset.--dataset-namestringVoxel51/FGVC-Aircraft
+Hugging Face dataset name (only used when --source hf).
+Ignore unless switching to HF mode.--data-dirstring./aircraft_dataFolder where images are saved/extracted.
+Change if you want data stored elsewhere (e.g. /data/fighters).--num-onlineinteger10Number of sample fighter images to download when --source online.
+Useful for quick testing. Increase to 20 if you want more test images.
+
+3. Training Mode Parameters (used with --mode train)
+ParameterType / ChoicesDefaultSignificance & When to Change--epochsinteger30Maximum number of epochs the model will run.
+With early stopping + scheduler, training usually stops much earlier (12-18 epochs). Set higher (50+) only if you have a very large dataset or 
+want to force longer training.--batch-sizeinteger16Number of images processed at once.
+• Higher = faster training but uses more memory
+• Lower = slower but more stable on laptops
+On your Mac (MPS), 16 is the sweet spot. Try 32 if you have 32GB+ RAM.--patienceinteger5Early stopping patience (new feature).
+Training stops if validation accuracy doesn't improve for this many epochs.
+• 3-5 = aggressive (good for quick experiments)
+• 7-10 = conservative (lets model train longer)
+Default 5 is perfect for this dataset.
+
+4. Inference Mode Parameters (used with --mode infer)
+ParameterType / ChoicesDefaultSignificance & When to Change--infer-imagestring (path or URL)— (required for infer)The image you want to classify.
+Can be local file (test.jpg) or web URL (https://...).
+Must be provided when using --mode infer.--model-pathstringbest_model.pthPath to the trained model file.
+Change only if you renamed the model or want to use a different checkpoint.
+
+5. Other Global Parameters
+ParameterType / ChoicesDefaultSignificance & When to Change--help or -h——Shows this full help message.
+Use anytime: python3 fighter_id3.py --help
+arly stopping + ReduceLROnPlateau (added in this version) means you can safely set --epochs 30 or even 50 — 
+the program will stop automatically when it stops improving.
+--batch-size 16 + MPS on your Mac gives the best speed/memory balance.
+'''
 
 class TransformedSubset(torch.utils.data.Dataset):
     def __init__(self, subset, transform=None):
@@ -138,7 +140,6 @@ def fix_kaggle_structure(data_dir: str, logger: logging.Logger):
 
 
 def find_image_root(data_dir: str, logger: logging.Logger):
-    # Prefer the 'crop' folder from the new dataset
     crop_path = os.path.join(data_dir, "crop")
     if os.path.exists(crop_path):
         try:
@@ -147,8 +148,6 @@ def find_image_root(data_dir: str, logger: logging.Logger):
             return crop_path
         except:
             pass
-
-    # Fallback to previous logic
     try:
         ds = ImageFolder(data_dir)
         if len(ds.classes) >= 70:
@@ -176,7 +175,7 @@ def download_kaggle_dataset(dataset_slug: str, data_dir: str, logger: logging.Lo
             from kaggle import api as KaggleApi
         api = KaggleApi()
         api.authenticate()
-        logger.info(f"Downloading new clean dataset: {dataset_slug}")
+        logger.info(f"Downloading clean fighter dataset: {dataset_slug}")
         api.dataset_download_files(dataset_slug, path=data_dir, unzip=True)
         logger.info("✅ Download complete")
         fix_kaggle_structure(data_dir, logger)
@@ -186,7 +185,55 @@ def download_kaggle_dataset(dataset_slug: str, data_dir: str, logger: logging.Lo
         sys.exit(1)
 
 
-# (prepare_hf_dataset, fetch_online_samples, get_dataloaders, train_model remain the same as last version – only find_image_root changed above)
+def prepare_hf_dataset(dataset_name: str, data_dir: str, logger: logging.Logger):
+    try:
+        logger.info(f"Loading HF dataset: {dataset_name}")
+        dataset = load_dataset(dataset_name)
+        os.makedirs(data_dir, exist_ok=True)
+        for split_name in ["train", "validation", "test"]:
+            if split_name not in dataset: continue
+            split_ds = dataset[split_name]
+            class_names = split_ds.features["label"].names
+            for idx, example in enumerate(tqdm(split_ds, desc=f"Saving {split_name}")):
+                label_idx = example["label"]
+                class_name = class_names[label_idx] if class_names else f"class_{label_idx}"
+                class_dir = os.path.join(data_dir, class_name)
+                os.makedirs(class_dir, exist_ok=True)
+                img = example["image"].convert("RGB")
+                img.save(os.path.join(class_dir, f"{split_name}_{idx:06d}.jpg"))
+        logger.info(f"✅ HF dataset ready")
+        return True
+    except Exception as e:
+        logger.error(f"HF failed: {e}")
+        return False
+
+
+def fetch_online_samples(data_dir: str, num_images: int, logger: logging.Logger):
+    urls = [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/F-22_Raptor.jpg/800px-F-22_Raptor.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/F-35_Lightning_II.jpg/800px-F-35_Lightning_II.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/F-16_Fighting_Falcon.jpg/800px-F-16_Fighting_Falcon.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Su-57.jpg/800px-Su-57.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Eurofighter_Typhoon.jpg/800px-Eurofighter_Typhoon.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Rafale.jpg/800px-Rafale.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/F-15_Eagle.jpg/800px-F-15_Eagle.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/MiG-29.jpg/800px-MiG-29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Su-27_Flanker.jpg/800px-Su-27_Flanker.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/F-14_Tomcat.jpg/800px-F-14_Tomcat.jpg",
+    ]
+    os.makedirs(data_dir, exist_ok=True)
+    downloaded = 0
+    for i, url in enumerate(urls[:num_images]):
+        try:
+            r = requests.get(url, timeout=10)
+            r.raise_for_status()
+            with open(os.path.join(data_dir, f"fighter_online_{i:02d}.jpg"), "wb") as f:
+                f.write(r.content)
+            downloaded += 1
+        except Exception as e:
+            logger.warning(f"Failed {url}: {e}")
+    logger.info(f"✅ {downloaded} online samples ready")
+    return downloaded > 0
 
 
 def get_dataloaders(data_dir: str, batch_size: int, logger: logging.Logger):
@@ -214,7 +261,7 @@ def get_dataloaders(data_dir: str, batch_size: int, logger: logging.Logger):
     return train_loader, val_loader, full_dataset.classes
 
 
-def train_model(train_loader, val_loader, num_classes: int, epochs: int, device, logger, model_path: str):
+def train_model(train_loader, val_loader, num_classes: int, epochs: int, patience: int, device, logger, model_path: str):
     if sys.platform == "darwin":
         import ssl
         ssl._create_default_https_context = ssl._create_unverified_context
@@ -226,9 +273,16 @@ def train_model(train_loader, val_loader, num_classes: int, epochs: int, device,
 
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=0.5, patience=3, verbose=True)
+
     best_val_acc = 0.0
+    patience_counter = 0
+    best_epoch = 0
+
+    logger.info(f"Starting training (max {epochs} epochs, early stopping patience = {patience})")
 
     for epoch in range(epochs):
+        # Train
         model.train()
         train_correct = 0
         for images, labels in tqdm(train_loader, desc=f"Epoch {epoch+1}/{epochs} [Train]"):
@@ -242,6 +296,7 @@ def train_model(train_loader, val_loader, num_classes: int, epochs: int, device,
 
         train_acc = train_correct / len(train_loader.dataset)
 
+        # Validate
         model.eval()
         val_correct = 0
         with torch.no_grad():
@@ -251,14 +306,31 @@ def train_model(train_loader, val_loader, num_classes: int, epochs: int, device,
                 val_correct += (outputs.argmax(1) == labels).sum().item()
 
         val_acc = val_correct / len(val_loader.dataset)
-        logger.info(f"Epoch {epoch+1} | Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f}")
+
+        # Scheduler & Early Stopping
+        scheduler.step(val_acc)
+        current_lr = optimizer.param_groups[0]['lr']
+        logger.info(f"Epoch {epoch+1} | Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f} | LR: {current_lr:.6f}")
 
         if val_acc > best_val_acc:
             best_val_acc = val_acc
-            torch.save({"model_state_dict": model.state_dict(), "class_names": train_loader.dataset.subset.dataset.classes, "num_classes": num_classes}, model_path)
-            logger.info(f"✅ Best model saved: {model_path}")
+            best_epoch = epoch + 1
+            patience_counter = 0
+            torch.save({
+                "model_state_dict": model.state_dict(),
+                "class_names": train_loader.dataset.subset.dataset.classes,
+                "num_classes": num_classes
+            }, model_path)
+            logger.info(f"✅ New best model saved (Val Acc: {val_acc:.4f})")
+        else:
+            patience_counter += 1
+            logger.info(f"⏳ No improvement for {patience_counter}/{patience} epochs")
 
-    logger.info("🎉 Training completed!")
+        if patience_counter >= patience:
+            logger.info(f"🎯 Early stopping triggered after {epoch+1} epochs (no improvement for {patience} epochs)")
+            break
+
+    logger.info(f"🎉 Training finished! Best Val Acc: {best_val_acc:.4f} at epoch {best_epoch}")
     return model_path
 
 
@@ -287,8 +359,8 @@ def infer_image(model_path: str, image_path_or_url: str, class_names, device, lo
         conf = torch.softmax(out, 1)[0][pred_idx].item()
         raw = class_names[pred_idx]
 
-    # Beautify names
-    display = raw.replace("F16", "F-16").replace("F35", "F-35").replace("F22", "F-22").replace("Su57", "Su-57").replace("Mig29", "MiG-29").replace("Rafale", "Rafale").replace("F15", "F-15")
+    # Beautify fighter names
+    display = raw.replace("F16", "F-16").replace("F35", "F-35").replace("F22", "F-22").replace("Su57", "Su-57").replace("Mig29", "MiG-29").replace("F15", "F-15")
     if display == raw and raw.startswith("F") and len(raw) <= 4:
         display = raw[:1] + "-" + raw[1:]
 
@@ -305,11 +377,12 @@ def main():
     parser = argparse.ArgumentParser(description="Production-grade Fighter Aircraft Identifier")
     parser.add_argument("--mode", choices=["download", "train", "infer"], required=True)
     parser.add_argument("--source", choices=["kaggle", "hf", "online"], default="kaggle")
-    parser.add_argument("--dataset-slug", default="a2015003713/militaryaircraftdetectiondataset")  # NEW clean dataset!
+    parser.add_argument("--dataset-slug", default="a2015003713/militaryaircraftdetectiondataset")
     parser.add_argument("--dataset-name", default="Voxel51/FGVC-Aircraft")
     parser.add_argument("--data-dir", default="./aircraft_data")
-    parser.add_argument("--epochs", type=int, default=10)
-    parser.add_argument("--batch-size", type=int, default=32)
+    parser.add_argument("--epochs", type=int, default=30, help="Maximum epochs")
+    parser.add_argument("--batch-size", type=int, default=16)
+    parser.add_argument("--patience", type=int, default=5, help="Early stopping patience")
     parser.add_argument("--infer-image", help="Path or URL")
     parser.add_argument("--model-path", default="best_model.pth")
     parser.add_argument("--num-online", type=int, default=10)
@@ -327,11 +400,14 @@ def main():
         if args.mode == "download":
             if args.source == "kaggle":
                 download_kaggle_dataset(args.dataset_slug, args.data_dir, logger)
-            # hf and online unchanged...
+            elif args.source == "hf":
+                prepare_hf_dataset(args.dataset_name, args.data_dir, logger)
+            elif args.source == "online":
+                fetch_online_samples(args.data_dir, args.num_online, logger)
 
         elif args.mode == "train":
             train_loader, val_loader, class_names = get_dataloaders(args.data_dir, args.batch_size, logger)
-            train_model(train_loader, val_loader, len(class_names), args.epochs, device, logger, args.model_path)
+            train_model(train_loader, val_loader, len(class_names), args.epochs, args.patience, device, logger, args.model_path)
 
         elif args.mode == "infer":
             if not args.infer_image:
