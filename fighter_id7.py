@@ -15,19 +15,20 @@ from torchvision.datasets import ImageFolder                                    
 from tqdm import tqdm                                                           # Progress bars 
 from datasets import load_dataset                                               # Hugging Face datasets (for alternative dataset loading)
 
+
 # =============================================================================
-# Fighter Aircraft Identifier - PRODUCTION-GRADE (Level 1 + Early Stopping)
-# Strong Aug + Weighted Loss + Cosine Scheduler + Automatic Early Stopping
+# Fighter Aircraft Identifier - PRODUCTION-GRADE (LR=0.001 + Extra Logging)
+# Strong Aug + Weighted Loss + Cosine Scheduler + Early Stopping
 # Real fighter names (F-35, Rafale, F-22, etc.)
 # Full exception handling + timestamped logging
 # =============================================================================
 # Usage:
 # 1) Download dataset:
-#    python fighter_id5.py --mode download --source kaggle
+#    python fighter_id7.py --mode download --source kaggle
 # 2) Train model:
-#    python fighter_id5.py --mode train --data-dir ./aircraft_data --epochs 30 --patience 5
+#    python fighter_id7.py --mode train --data-dir ./aircraft_data --epochs 30 --patience 5
 # 3) Inference:
-#    python fighter_id5.py --mode infer --infer-image path_or_url_to_image.jpg
+#    python fighter_id7.py --mode infer --infer-image path_or_url_to_image.jpg
 # =============================================================================
 # Train Acc: This is the training accuracy for that epoch.
 # It tells you: “Out of all the training images the model saw this epoch,
@@ -179,7 +180,8 @@ def get_dataloaders(data_dir: str, batch_size: int, logger: logging.Logger):
     test_size = len(full_dataset) - train_size - val_size
     train_raw, val_raw, test_raw = random_split(full_dataset, [train_size, val_size, test_size])
 
-    # Strong augmentation pipeline for training, simple normalization for val/test
+    logger.info(f"Dataset split → Train: {len(train_raw)} | Val: {len(val_raw)} | Test: {len(test_raw)}")
+
     train_transform = transforms.Compose([
         transforms.Resize((256, 256)),
         transforms.RandomResizedCrop(224, scale=(0.8, 1.0)),
@@ -200,13 +202,13 @@ def get_dataloaders(data_dir: str, batch_size: int, logger: logging.Logger):
     val_ds   = TransformedSubset(val_raw,   val_transform)
     test_ds  = TransformedSubset(test_raw,  val_transform)
 
-    # Weighted sampler for class imbalance
+    # Weighted sampler for class imbalance (heavily penalizes misclassifying underrepresented classes)
     class_counts = np.bincount([label for _, label in train_raw])
     weights = 1. / class_counts
     sample_weights = [weights[label] for _, label in train_raw]
     sampler = WeightedRandomSampler(sample_weights, len(sample_weights), replacement=True)
 
-    pin_memory = torch.cuda.is_available()
+    pin_memory = torch.cuda.is_available() # Pin memory for faster GPU transfers if available
     train_loader = DataLoader(train_ds, batch_size=batch_size, sampler=sampler, num_workers=4, pin_memory=pin_memory)
     val_loader   = DataLoader(val_ds,   batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=pin_memory)
     test_loader  = DataLoader(test_ds,  batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=pin_memory)
@@ -218,28 +220,28 @@ def train_model(train_loader, val_loader, test_loader, num_classes: int, max_epo
     if sys.platform == "darwin":
         import ssl
         ssl._create_default_https_context = ssl._create_unverified_context
-        logger.warning("macOS SSL workaround applied for ResNet weights")
+        logger.warning("macOS SSL workaround applied")
 
     model = models.resnet50(weights="IMAGENET1K_V1")
     model.fc = nn.Linear(model.fc.in_features, num_classes)
     model = model.to(device)
 
-    # Weighted loss
+    # Weighted loss to handle class imbalance (heavily penalizes misclassifying underrepresented classes)
     class_counts = np.bincount([label for _, label in train_loader.dataset.subset])
     class_weights = torch.tensor(1. / class_counts, dtype=torch.float32).to(device)
     criterion = nn.CrossEntropyLoss(weight=class_weights)
 
-    optimizer = optim.Adam(model.parameters(), lr=0.0005)
+    # CHANGED: Starting LR = 0.001
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=max_epochs)
 
     best_val_acc = 0.0
     patience_counter = 0
     best_epoch = 0
 
-    logger.info(f"Starting training (max {max_epochs} epochs, early stopping patience = {patience})")
+    logger.info(f"🚀 STARTING TRAINING | LR=0.001 | Patience={patience} | Max Epochs={max_epochs} | Device={device}")
 
     for epoch in range(max_epochs):
-        # Train phase
         model.train()
         train_correct = 0
         for images, labels in tqdm(train_loader, desc=f"Epoch {epoch+1}/{max_epochs} [Train]"):
@@ -253,7 +255,6 @@ def train_model(train_loader, val_loader, test_loader, num_classes: int, max_epo
 
         train_acc = train_correct / len(train_loader.dataset)
 
-        # Validation phase
         model.eval()
         val_correct = 0
         with torch.no_grad():
@@ -265,9 +266,9 @@ def train_model(train_loader, val_loader, test_loader, num_classes: int, max_epo
         val_acc = val_correct / len(val_loader.dataset)
         scheduler.step()
 
-        logger.info(f"Epoch {epoch+1} | Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f} | LR: {scheduler.get_last_lr()[0]:.6f}")
+        current_lr = scheduler.get_last_lr()[0]
+        logger.info(f"Epoch {epoch+1} | Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f} | LR: {current_lr:.6f} | Best Val so far: {best_val_acc:.4f}")
 
-        # Early stopping logic
         if val_acc > best_val_acc:
             best_val_acc = val_acc
             best_epoch = epoch + 1
@@ -277,16 +278,16 @@ def train_model(train_loader, val_loader, test_loader, num_classes: int, max_epo
                 "class_names": train_loader.dataset.subset.dataset.classes,
                 "num_classes": num_classes
             }, model_path)
-            logger.info(f"✅ New best model saved at epoch {best_epoch} (Val Acc: {val_acc:.4f})")
+            logger.info(f"✅ NEW BEST MODEL SAVED at epoch {best_epoch} (Val Acc: {val_acc:.4f})")
         else:
             patience_counter += 1
             logger.info(f"⏳ No improvement for {patience_counter}/{patience} epochs")
 
         if patience_counter >= patience:
-            logger.info(f"🎯 Early stopping triggered after {epoch+1} epochs (patience = {patience})")
+            logger.info(f"🎯 Early stopping triggered after {epoch+1} epochs")
             break
 
-    # FINAL TEST EVALUATION (always run on best model)
+    # Final Test Evaluation
     checkpoint = torch.load(model_path, map_location=device, weights_only=True)
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
@@ -332,7 +333,6 @@ def infer_image(model_path: str, image_path_or_url: str, class_names, device, lo
         conf = torch.softmax(out, 1)[0][pred_idx].item()
         raw = class_names[pred_idx]
 
-    # Beautify fighter names
     display = raw.replace("F16", "F-16").replace("F35", "F-35").replace("F22", "F-22")\
                  .replace("Su57", "Su-57").replace("Mig29", "MiG-29").replace("F15", "F-15")
     if display == raw and raw.startswith("F") and len(raw) <= 4:
