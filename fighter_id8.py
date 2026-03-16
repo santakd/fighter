@@ -19,7 +19,7 @@ from datasets import load_dataset                                               
 # =============================================================================
 # Fighter Aircraft Identifier - PRODUCTION-GRADE (EASIER DATASET + LR=0.001)
 # Now using kadirkrtls/tez-set-v1 (81 real fighter names, full images)
-# Kaggle slug: kadirkrtls/tez-set-v1
+# Kaggle slug: kadirkrtls/tez-set-v1, https://www.kaggle.com/datasets/kadirkrtls/tez-set-v1
 # 81 real fighter classes with proper names (F-16 Fighting Falcon, F-35 Lightning II,
 # Rafale, Su-57, MiG-29, Eurofighter Typhoon, etc.)
 # Full aircraft photos (no tight crops) → much easier to learn
