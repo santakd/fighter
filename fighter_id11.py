@@ -208,9 +208,9 @@ def train_model(train_loader, val_loader, test_loader, num_classes: int, max_epo
     class_counts = np.bincount([label for _, label in train_loader.dataset.subset])
     class_weights = torch.tensor(1. / class_counts, dtype=torch.float32).to(device)
     criterion = nn.CrossEntropyLoss(weight=class_weights)
-
+    # criterion = nn.CrossEntropyLoss(label_smoothing=0.1, weight=class_weights) - # this can be used for label smoothing, which can help prevent the model from becoming overconfident in its predictions and improve generalization 
     # Use Adam optimizer with a cosine annealing learning rate scheduler, which can help the model converge faster and potentially achieve better performance by adjusting the learning rate dynamically during training
-    # The cosine annealing schedule allows for a gradual reduction in learning rate, which can help the model fine-tune its weights as it approaches convergence. Add ReduceLROnPlateau after cosine  scheduler to reduce
+    # The cosine annealing schedule allows for a gradual reduction in learning rate, which can help the model fine-tune its weights as it approaches convergence. Add ReduceLROnPlateau after cosine scheduler to reduce
     # LR if validation accuracy plateaus, which can help the model escape local minima and continue improving performance when the validation accuracy stops improving for a certain number of epochs
     optimizer = optim.Adam(model.parameters(), lr=0.001)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=max_epochs)
