@@ -90,18 +90,18 @@ def create_plots(df: pd.DataFrame, logger):
     axs[1].set_yscale("log")  # LR is best viewed on log scale
 
     plt.tight_layout()
-    plt.savefig("accuracy_plot.png", dpi=300, bbox_inches="tight")
+    plt.savefig("training_plot.png", dpi=300, bbox_inches="tight")
     # plt.savefig("lr_plot.png", dpi=300, bbox_inches="tight")
     plt.show()
 
     logger.info("✅ Plot saved as:")
-    logger.info("   • accuracy_plot.png (Train/Val Accuracy) and (Learning Rate)")
+    logger.info("   • training_plot.png (Train/Val Accuracy) and (Learning Rate)")
     # logger.info("   • lr_plot.png (Learning Rate)")
 
 
 def main():
     parser = argparse.ArgumentParser(description="Production-grade Training Log Analyzer")
-    parser.add_argument("--log", type=str, default="fighter_id10_20260316_174119.log",
+    parser.add_argument("--log", type=str, default="fighter_id10.log",
                         help="Path to the training log file")
     args = parser.parse_args()
 

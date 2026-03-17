@@ -1,0 +1,129 @@
+2026-03-16 17:41:19,370 - INFO - Logging initialized → fighter_id10_20260316_174119.log
+2026-03-16 17:41:19,480 - INFO - Using device: mps
+2026-03-16 17:41:19,511 - INFO - ✅ Using pre-split dataset at ./aircraft_data
+2026-03-16 17:41:19,547 - INFO - ✅ Using pre-split folders → Train: 5678 | Val: 810 | Test: 1620
+2026-03-16 17:42:47,006 - WARNING - macOS SSL workaround applied
+2026-03-16 17:43:31,488 - INFO - 🚀 STARTING TRAINING | LR=0.001 | Patience=10 | Max Epochs=60 | Device=mps
+2026-03-16 17:49:01,985 - INFO - Epoch 1 | Train Acc: 0.0139 | Val Acc: 0.0123 | LR: 0.000999 | Best Val so far: 0.0000
+2026-03-16 17:49:02,274 - INFO - ✅ NEW BEST MODEL SAVED at epoch 1 (Val Acc: 0.0123)
+2026-03-16 17:55:42,953 - INFO - Epoch 2 | Train Acc: 0.0166 | Val Acc: 0.0235 | LR: 0.000997 | Best Val so far: 0.0123
+2026-03-16 17:55:43,194 - INFO - ✅ NEW BEST MODEL SAVED at epoch 2 (Val Acc: 0.0235)
+2026-03-16 18:02:54,059 - INFO - Epoch 3 | Train Acc: 0.0213 | Val Acc: 0.0222 | LR: 0.000994 | Best Val so far: 0.0235
+2026-03-16 18:02:54,064 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-16 18:11:01,351 - INFO - Epoch 4 | Train Acc: 0.0206 | Val Acc: 0.0198 | LR: 0.000989 | Best Val so far: 0.0235
+2026-03-16 18:11:01,352 - INFO - ⏳ No improvement for 2/10 epochs
+2026-03-16 18:19:24,615 - INFO - Epoch 5 | Train Acc: 0.0204 | Val Acc: 0.0284 | LR: 0.000983 | Best Val so far: 0.0235
+2026-03-16 18:19:24,872 - INFO - ✅ NEW BEST MODEL SAVED at epoch 5 (Val Acc: 0.0284)
+2026-03-16 18:26:47,109 - INFO - Epoch 6 | Train Acc: 0.0245 | Val Acc: 0.0272 | LR: 0.000976 | Best Val so far: 0.0284
+2026-03-16 18:26:47,111 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-16 18:34:00,683 - INFO - Epoch 7 | Train Acc: 0.0287 | Val Acc: 0.0309 | LR: 0.000967 | Best Val so far: 0.0284
+2026-03-16 18:34:00,983 - INFO - ✅ NEW BEST MODEL SAVED at epoch 7 (Val Acc: 0.0309)
+2026-03-16 18:41:01,306 - INFO - Epoch 8 | Train Acc: 0.0273 | Val Acc: 0.0370 | LR: 0.000957 | Best Val so far: 0.0309
+2026-03-16 18:41:01,692 - INFO - ✅ NEW BEST MODEL SAVED at epoch 8 (Val Acc: 0.0370)
+2026-03-16 18:47:58,571 - INFO - Epoch 9 | Train Acc: 0.0306 | Val Acc: 0.0407 | LR: 0.000946 | Best Val so far: 0.0370
+2026-03-16 18:47:58,867 - INFO - ✅ NEW BEST MODEL SAVED at epoch 9 (Val Acc: 0.0407)
+2026-03-16 18:56:42,417 - INFO - Epoch 10 | Train Acc: 0.0389 | Val Acc: 0.0383 | LR: 0.000933 | Best Val so far: 0.0407
+2026-03-16 18:56:42,420 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-16 19:05:28,790 - INFO - Epoch 11 | Train Acc: 0.0398 | Val Acc: 0.0494 | LR: 0.000919 | Best Val so far: 0.0407
+2026-03-16 19:05:29,071 - INFO - ✅ NEW BEST MODEL SAVED at epoch 11 (Val Acc: 0.0494)
+2026-03-16 19:14:39,556 - INFO - Epoch 12 | Train Acc: 0.0467 | Val Acc: 0.0568 | LR: 0.000905 | Best Val so far: 0.0494
+2026-03-16 19:14:39,801 - INFO - ✅ NEW BEST MODEL SAVED at epoch 12 (Val Acc: 0.0568)
+2026-03-16 19:23:28,714 - INFO - Epoch 13 | Train Acc: 0.0528 | Val Acc: 0.0519 | LR: 0.000889 | Best Val so far: 0.0568
+2026-03-16 19:23:28,720 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-16 19:30:58,189 - INFO - Epoch 14 | Train Acc: 0.0625 | Val Acc: 0.0667 | LR: 0.000872 | Best Val so far: 0.0568
+2026-03-16 19:30:58,463 - INFO - ✅ NEW BEST MODEL SAVED at epoch 14 (Val Acc: 0.0667)
+2026-03-16 19:38:03,846 - INFO - Epoch 15 | Train Acc: 0.0696 | Val Acc: 0.0691 | LR: 0.000854 | Best Val so far: 0.0667
+2026-03-16 19:38:04,177 - INFO - ✅ NEW BEST MODEL SAVED at epoch 15 (Val Acc: 0.0691)
+2026-03-16 19:45:16,854 - INFO - Epoch 16 | Train Acc: 0.0775 | Val Acc: 0.0741 | LR: 0.000835 | Best Val so far: 0.0691
+2026-03-16 19:45:17,160 - INFO - ✅ NEW BEST MODEL SAVED at epoch 16 (Val Acc: 0.0741)
+2026-03-16 19:53:57,997 - INFO - Epoch 17 | Train Acc: 0.0940 | Val Acc: 0.1012 | LR: 0.000815 | Best Val so far: 0.0741
+2026-03-16 19:53:58,288 - INFO - ✅ NEW BEST MODEL SAVED at epoch 17 (Val Acc: 0.1012)
+2026-03-16 20:03:33,871 - INFO - Epoch 18 | Train Acc: 0.1097 | Val Acc: 0.1049 | LR: 0.000794 | Best Val so far: 0.1012
+2026-03-16 20:03:34,141 - INFO - ✅ NEW BEST MODEL SAVED at epoch 18 (Val Acc: 0.1049)
+2026-03-16 20:11:39,718 - INFO - Epoch 19 | Train Acc: 0.1328 | Val Acc: 0.1136 | LR: 0.000772 | Best Val so far: 0.1049
+2026-03-16 20:11:40,001 - INFO - ✅ NEW BEST MODEL SAVED at epoch 19 (Val Acc: 0.1136)
+2026-03-16 20:19:18,217 - INFO - Epoch 20 | Train Acc: 0.1312 | Val Acc: 0.1481 | LR: 0.000750 | Best Val so far: 0.1136
+2026-03-16 20:19:18,471 - INFO - ✅ NEW BEST MODEL SAVED at epoch 20 (Val Acc: 0.1481)
+2026-03-16 20:55:55,772 - INFO - Epoch 21 | Train Acc: 0.1469 | Val Acc: 0.1420 | LR: 0.000727 | Best Val so far: 0.1481
+2026-03-16 20:55:55,774 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-16 21:04:36,882 - INFO - Epoch 22 | Train Acc: 0.1675 | Val Acc: 0.1543 | LR: 0.000703 | Best Val so far: 0.1481
+2026-03-16 21:04:37,121 - INFO - ✅ NEW BEST MODEL SAVED at epoch 22 (Val Acc: 0.1543)
+2026-03-16 21:16:37,475 - INFO - Epoch 23 | Train Acc: 0.1840 | Val Acc: 0.1667 | LR: 0.000679 | Best Val so far: 0.1543
+2026-03-16 21:16:37,746 - INFO - ✅ NEW BEST MODEL SAVED at epoch 23 (Val Acc: 0.1667)
+2026-03-16 21:29:06,539 - INFO - Epoch 24 | Train Acc: 0.1964 | Val Acc: 0.1753 | LR: 0.000655 | Best Val so far: 0.1667
+2026-03-16 21:29:06,822 - INFO - ✅ NEW BEST MODEL SAVED at epoch 24 (Val Acc: 0.1753)
+2026-03-16 21:34:36,301 - INFO - Epoch 25 | Train Acc: 0.2161 | Val Acc: 0.1864 | LR: 0.000629 | Best Val so far: 0.1753
+2026-03-16 21:34:36,597 - INFO - ✅ NEW BEST MODEL SAVED at epoch 25 (Val Acc: 0.1864)
+2026-03-16 21:40:41,198 - INFO - Epoch 26 | Train Acc: 0.2282 | Val Acc: 0.2099 | LR: 0.000604 | Best Val so far: 0.1864
+2026-03-16 21:40:41,483 - INFO - ✅ NEW BEST MODEL SAVED at epoch 26 (Val Acc: 0.2099)
+2026-03-16 21:47:17,599 - INFO - Epoch 27 | Train Acc: 0.2518 | Val Acc: 0.2099 | LR: 0.000578 | Best Val so far: 0.2099
+2026-03-16 21:47:17,601 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-16 21:53:59,575 - INFO - Epoch 28 | Train Acc: 0.2670 | Val Acc: 0.2160 | LR: 0.000552 | Best Val so far: 0.2099
+2026-03-16 21:53:59,862 - INFO - ✅ NEW BEST MODEL SAVED at epoch 28 (Val Acc: 0.2160)
+2026-03-16 22:00:55,678 - INFO - Epoch 29 | Train Acc: 0.2869 | Val Acc: 0.2346 | LR: 0.000526 | Best Val so far: 0.2160
+2026-03-16 22:00:55,958 - INFO - ✅ NEW BEST MODEL SAVED at epoch 29 (Val Acc: 0.2346)
+2026-03-16 22:08:58,082 - INFO - Epoch 30 | Train Acc: 0.3212 | Val Acc: 0.2556 | LR: 0.000500 | Best Val so far: 0.2346
+2026-03-16 22:08:58,364 - INFO - ✅ NEW BEST MODEL SAVED at epoch 30 (Val Acc: 0.2556)
+2026-03-16 22:17:47,708 - INFO - Epoch 31 | Train Acc: 0.3306 | Val Acc: 0.2506 | LR: 0.000474 | Best Val so far: 0.2556
+2026-03-16 22:17:47,711 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-16 22:26:38,230 - INFO - Epoch 32 | Train Acc: 0.3517 | Val Acc: 0.2667 | LR: 0.000448 | Best Val so far: 0.2556
+2026-03-16 22:26:38,504 - INFO - ✅ NEW BEST MODEL SAVED at epoch 32 (Val Acc: 0.2667)
+2026-03-16 22:35:13,133 - INFO - Epoch 33 | Train Acc: 0.3818 | Val Acc: 0.2432 | LR: 0.000422 | Best Val so far: 0.2667
+2026-03-16 22:35:13,137 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-16 22:42:36,723 - INFO - Epoch 34 | Train Acc: 0.3945 | Val Acc: 0.2778 | LR: 0.000396 | Best Val so far: 0.2667
+2026-03-16 22:42:37,098 - INFO - ✅ NEW BEST MODEL SAVED at epoch 34 (Val Acc: 0.2778)
+2026-03-16 22:50:04,938 - INFO - Epoch 35 | Train Acc: 0.4105 | Val Acc: 0.2988 | LR: 0.000371 | Best Val so far: 0.2778
+2026-03-16 22:50:05,202 - INFO - ✅ NEW BEST MODEL SAVED at epoch 35 (Val Acc: 0.2988)
+2026-03-16 22:57:18,899 - INFO - Epoch 36 | Train Acc: 0.4484 | Val Acc: 0.3198 | LR: 0.000345 | Best Val so far: 0.2988
+2026-03-16 22:57:19,294 - INFO - ✅ NEW BEST MODEL SAVED at epoch 36 (Val Acc: 0.3198)
+2026-03-16 23:04:41,632 - INFO - Epoch 37 | Train Acc: 0.4662 | Val Acc: 0.3037 | LR: 0.000321 | Best Val so far: 0.3198
+2026-03-16 23:04:41,640 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-16 23:11:55,397 - INFO - Epoch 38 | Train Acc: 0.4792 | Val Acc: 0.3247 | LR: 0.000297 | Best Val so far: 0.3198
+2026-03-16 23:11:55,739 - INFO - ✅ NEW BEST MODEL SAVED at epoch 38 (Val Acc: 0.3247)
+2026-03-16 23:18:54,040 - INFO - Epoch 39 | Train Acc: 0.5033 | Val Acc: 0.3259 | LR: 0.000273 | Best Val so far: 0.3247
+2026-03-16 23:18:54,420 - INFO - ✅ NEW BEST MODEL SAVED at epoch 39 (Val Acc: 0.3259)
+2026-03-16 23:26:53,621 - INFO - Epoch 40 | Train Acc: 0.5203 | Val Acc: 0.3383 | LR: 0.000250 | Best Val so far: 0.3259
+2026-03-16 23:26:53,961 - INFO - ✅ NEW BEST MODEL SAVED at epoch 40 (Val Acc: 0.3383)
+2026-03-16 23:35:33,914 - INFO - Epoch 41 | Train Acc: 0.5525 | Val Acc: 0.3296 | LR: 0.000228 | Best Val so far: 0.3383
+2026-03-16 23:35:33,916 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-16 23:44:38,173 - INFO - Epoch 42 | Train Acc: 0.5712 | Val Acc: 0.3519 | LR: 0.000206 | Best Val so far: 0.3383
+2026-03-16 23:44:38,537 - INFO - ✅ NEW BEST MODEL SAVED at epoch 42 (Val Acc: 0.3519)
+2026-03-16 23:54:16,519 - INFO - Epoch 43 | Train Acc: 0.5815 | Val Acc: 0.3531 | LR: 0.000185 | Best Val so far: 0.3519
+2026-03-16 23:54:16,966 - INFO - ✅ NEW BEST MODEL SAVED at epoch 43 (Val Acc: 0.3531)
+2026-03-17 00:02:31,431 - INFO - Epoch 44 | Train Acc: 0.6074 | Val Acc: 0.3802 | LR: 0.000165 | Best Val so far: 0.3531
+2026-03-17 00:02:31,702 - INFO - ✅ NEW BEST MODEL SAVED at epoch 44 (Val Acc: 0.3802)
+2026-03-17 00:10:47,111 - INFO - Epoch 45 | Train Acc: 0.6132 | Val Acc: 0.3580 | LR: 0.000146 | Best Val so far: 0.3802
+2026-03-17 00:10:47,115 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-17 00:20:03,524 - INFO - Epoch 46 | Train Acc: 0.6548 | Val Acc: 0.3840 | LR: 0.000128 | Best Val so far: 0.3802
+2026-03-17 00:20:03,864 - INFO - ✅ NEW BEST MODEL SAVED at epoch 46 (Val Acc: 0.3840)
+2026-03-17 00:29:42,249 - INFO - Epoch 47 | Train Acc: 0.6562 | Val Acc: 0.3840 | LR: 0.000111 | Best Val so far: 0.3840
+2026-03-17 00:29:42,254 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-17 00:37:31,263 - INFO - Epoch 48 | Train Acc: 0.6617 | Val Acc: 0.3864 | LR: 0.000095 | Best Val so far: 0.3840
+2026-03-17 00:37:31,541 - INFO - ✅ NEW BEST MODEL SAVED at epoch 48 (Val Acc: 0.3864)
+2026-03-17 00:44:27,094 - INFO - Epoch 49 | Train Acc: 0.6721 | Val Acc: 0.4025 | LR: 0.000081 | Best Val so far: 0.3864
+2026-03-17 00:44:27,387 - INFO - ✅ NEW BEST MODEL SAVED at epoch 49 (Val Acc: 0.4025)
+2026-03-17 00:51:27,758 - INFO - Epoch 50 | Train Acc: 0.7024 | Val Acc: 0.3926 | LR: 0.000067 | Best Val so far: 0.4025
+2026-03-17 00:51:27,761 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-17 00:58:45,784 - INFO - Epoch 51 | Train Acc: 0.7129 | Val Acc: 0.3963 | LR: 0.000054 | Best Val so far: 0.4025
+2026-03-17 00:58:45,786 - INFO - ⏳ No improvement for 2/10 epochs
+2026-03-17 01:05:50,043 - INFO - Epoch 52 | Train Acc: 0.7187 | Val Acc: 0.3963 | LR: 0.000043 | Best Val so far: 0.4025
+2026-03-17 01:05:50,044 - INFO - ⏳ No improvement for 3/10 epochs
+2026-03-17 01:12:51,543 - INFO - Epoch 53 | Train Acc: 0.7263 | Val Acc: 0.4074 | LR: 0.000033 | Best Val so far: 0.4025
+2026-03-17 01:12:51,789 - INFO - ✅ NEW BEST MODEL SAVED at epoch 53 (Val Acc: 0.4074)
+2026-03-17 01:19:55,308 - INFO - Epoch 54 | Train Acc: 0.7182 | Val Acc: 0.4148 | LR: 0.000024 | Best Val so far: 0.4074
+2026-03-17 01:19:55,539 - INFO - ✅ NEW BEST MODEL SAVED at epoch 54 (Val Acc: 0.4148)
+2026-03-17 01:27:00,571 - INFO - Epoch 55 | Train Acc: 0.7312 | Val Acc: 0.3889 | LR: 0.000017 | Best Val so far: 0.4148
+2026-03-17 01:27:00,576 - INFO - ⏳ No improvement for 1/10 epochs
+2026-03-17 01:34:57,067 - INFO - Epoch 56 | Train Acc: 0.7231 | Val Acc: 0.4099 | LR: 0.000011 | Best Val so far: 0.4148
+2026-03-17 01:34:57,070 - INFO - ⏳ No improvement for 2/10 epochs
+2026-03-17 01:43:32,384 - INFO - Epoch 57 | Train Acc: 0.7460 | Val Acc: 0.4000 | LR: 0.000006 | Best Val so far: 0.4148
+2026-03-17 01:43:32,388 - INFO - ⏳ No improvement for 3/10 epochs
+2026-03-17 01:52:16,928 - INFO - Epoch 58 | Train Acc: 0.7441 | Val Acc: 0.4074 | LR: 0.000003 | Best Val so far: 0.4148
+2026-03-17 01:52:16,932 - INFO - ⏳ No improvement for 4/10 epochs
+2026-03-17 02:00:51,587 - INFO - Epoch 59 | Train Acc: 0.7372 | Val Acc: 0.3963 | LR: 0.000001 | Best Val so far: 0.4148
+2026-03-17 02:00:51,590 - INFO - ⏳ No improvement for 5/10 epochs
+2026-03-17 02:11:35,646 - INFO - Epoch 60 | Train Acc: 0.7402 | Val Acc: 0.4086 | LR: 0.000000 | Best Val so far: 0.4148
+2026-03-17 02:11:35,651 - INFO - ⏳ No improvement for 6/10 epochs
+2026-03-17 02:12:58,873 - INFO - 🎯 FINAL TEST ACCURACY: 0.4259 (690/1620)
+2026-03-17 02:12:58,876 - INFO - 🎉 Training completed! Best Val Acc: 0.4148 at epoch 54
+2026-03-17 02:12:58,944 - INFO - ✅ Program completed successfully
