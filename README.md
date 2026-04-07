@@ -4,7 +4,9 @@ Repo for fighter plane training and inference
 
 ### ResNet50 – A Landmark in Deep Learning
 
-ResNet50 is one of the most influential convolutional neural network architectures ever created. Introduced in the 2015 paper **“Deep Residual Learning for Image Recognition”** by He et al. (Microsoft Research), it won the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) that year and became a foundational model in computer vision.
+ResNet50 is one of the most influential convolutional neural network architectures ever created. 
+Introduced in the 2015 paper **“Deep Residual Learning for Image Recognition”** by He et al. (Microsoft Research). 
+It won the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) that year and became a foundational model in computer vision.
 
 **Key innovations**:
 - **Residual (skip) connections** — The core idea that allows training very deep networks (50, 101, 152 layers) without vanishing gradients. Instead of learning H(x) directly, the network learns the residual F(x) = H(x) − x, and the output is H(x) = F(x) + x.
