@@ -2,6 +2,9 @@
 
 Repo for fighter plane training and inference
 
+![Tejas Fighter](https://github.com/santakd/fighter/blob/main/t_4.jpg)
+
+
 ### ResNet50 – A Landmark in Deep Learning
 
 ResNet50 is one of the most influential convolutional neural network architectures ever created. 
@@ -75,3 +78,6 @@ You can always walk straight down the stairs (identity path) if the floors aren�
 Adding more floors never makes it impossible to escape — it can only help or do no harm.
 
 That’s why ResNet50 (and deeper ResNets) suddenly made 100+ layer networks not only possible, but state-of-the-art in 2015 — and still very strong baselines today.
+
+
+---
