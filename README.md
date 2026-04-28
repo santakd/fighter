@@ -79,5 +79,4 @@ Adding more floors never makes it impossible to escape — it can only help or d
 
 That’s why ResNet50 (and deeper ResNets) suddenly made 100+ layer networks not only possible, but state-of-the-art in 2015 — and still very strong baselines today.
 
-
 ---
