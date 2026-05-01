@@ -28,6 +28,8 @@ ResNet50 remains the **“safe, reliable default”** for many production image 
 
 The **fighter_id(x).py** programs are iteratively built **production-grade fine-grained image classifier** trained to recognize 81 different fighter aircraft types from the `kadirkrtls/tez-set-v1` Kaggle dataset (~8,100 images).
 
+Refer the programs [fighter_id10.py](https://github.com/santakd/fighter/blob/main/fighter_id10.py) and [fighter_id11.py](https://github.com/santakd/fighter/blob/main/fighter_id11.py) 
+
 **Core features & design choices**:
 - **Backbone**: ResNet50 pre-trained on ImageNet (transfer learning) with the final fully-connected layer replaced to output 81 classes.
 - **Data handling**: Automatically detects and uses the pre-split Train/Validation/Test folders (or falls back to random split). Fixes nested Kaggle folder structure.
