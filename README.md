@@ -10,6 +10,8 @@ Repo for fighter plane training and inference
 ResNet50 is one of the most influential convolutional neural network architectures ever created. 
 Introduced in the 2015 paper **“Deep Residual Learning for Image Recognition”** by He et al. (Microsoft Research). 
 It won the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) that year and became a foundational model in computer vision.
+ResNet-50 is a 50-layer convolutional neural network (CNN) widely used for image recognition, featuring residual learning (skip connections) to mitigate vanishing gradient problems in deep networks.
+It is a cornerstone model in computer vision, achieving ~80.8% top-1 accuracy on ImageNet-1K and commonly used for transfer learning.
 
 **Key innovations**:
 - **Residual (skip) connections** — The core idea that allows training very deep networks (50, 101, 152 layers) without vanishing gradients. Instead of learning H(x) directly, the network learns the residual F(x) = H(x) − x, and the output is H(x) = F(x) + x.
