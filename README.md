@@ -13,6 +13,9 @@ It won the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) that year 
 ResNet-50 is a 50-layer convolutional neural network (CNN) widely used for image recognition, featuring residual learning (skip connections) to mitigate vanishing gradient problems in deep networks.
 It is a cornerstone model in computer vision, achieving ~80.8% top-1 accuracy on ImageNet-1K and commonly used for transfer learning.
 
+![ResNet50_Arch](https://github.com/santakd/fighter/blob/main/resnet50_arch.png)
+
+
 **Key innovations**:
 - **Residual (skip) connections** — The core idea that allows training very deep networks (50, 101, 152 layers) without vanishing gradients. Instead of learning H(x) directly, the network learns the residual F(x) = H(x) − x, and the output is H(x) = F(x) + x.
 - **Bottleneck design** — Uses 1×1 convolutions to reduce and restore dimensions, making deeper layers computationally efficient.
