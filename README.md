@@ -4,8 +4,8 @@ Repo for fighter plane training and inference using ResNet50 CNN
 
 ![Tejas Fighter](https://github.com/santakd/fighter/blob/main/t_4.jpg)
 
-
-   
+    
+    
 ### ResNet50 – A Landmark in Deep Learning
 
 ResNet50 is one of the most influential convolutional neural network architectures ever created. 
