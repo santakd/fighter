@@ -1,6 +1,6 @@
 # fighter ✈️
 
-Repo for fighter plane training and inference using ResNet50 CNN
+Repo for fighter plane image recognition training and inference using ResNet50 CNN
 
 ![Tejas Fighter](https://github.com/santakd/fighter/blob/main/t_4.jpg)
 
