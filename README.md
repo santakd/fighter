@@ -64,11 +64,11 @@ Degradation problem — adding more layers sometimes makes accuracy worse on bot
 Surprisingly, a deeper plain network (just stacking conv layers) performs worse than a shallower one — even after careful initialization and regularization.
 The Residual Learning Idea
 Instead of forcing the network to learn the desired underlying mapping H(x) directly, ResNet lets it learn the residual:
-F(x) = H(x) − x
+```F(x) = H(x) − x
 Then the actual output becomes:
 H(x) = F(x) + x
 This is implemented with a shortcut connection that adds the input x directly to the output of a few stacked layers (the residual block).
-
+``` 
 **Why Residual Connections Work So Well**
 
 1. Gradient highway
